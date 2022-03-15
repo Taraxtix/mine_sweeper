@@ -10,22 +10,25 @@
 
 #include <assert.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 /* ********************************************************************** */
 /*                             GAME ROUTINES                              */
 /* ********************************************************************** */
 
-game game_new_empty(uint nb_cols, uint nb_rows)
+game game_new_empty(uint nb_rows, uint nb_cols)
 {
     game g = (game)malloc(sizeof(struct game_s));
     assert(g);
+    g->nb_rows = nb_rows;
+    g->nb_cols = nb_cols;
 
-    square *squares = (square *)calloc(nb_cols * nb_rows, sizeof(square));
+    square *squares = (square *)malloc(nb_cols * nb_rows * sizeof(square));
     assert(squares);
 
-    g->nb_cols = nb_cols;
-    g->nb_rows = nb_rows;
+    for (uint i = 0; i < nb_rows * nb_cols; i++)
+        squares[i] = BLANK;
     g->squares = squares;
 
     return g;
@@ -33,9 +36,9 @@ game game_new_empty(uint nb_cols, uint nb_rows)
 
 /* **************************************************************** */
 
-game game_new(uint nb_cols, uint nb_rows, square *squares)
+game game_new(uint nb_rows, uint nb_cols, square *squares)
 {
-    game g = game_new_empty(nb_cols, nb_rows);
+    game g = game_new_empty(nb_rows, nb_cols);
     for (uint i = 0; i < nb_cols * nb_rows; i++)
     {
         g->squares[i] = squares[i];
@@ -47,7 +50,7 @@ game game_new(uint nb_cols, uint nb_rows, square *squares)
 
 game game_copy(c_game g)
 {
-    return game_new(g->nb_cols, g->nb_rows, g->squares);
+    return game_new(g->nb_rows, g->nb_cols, g->squares);
 }
 
 /* **************************************************************** */
@@ -123,17 +126,20 @@ bool game_is_discovered(c_game g, uint i, uint j) { return _DISCO(g, i, j); }
 
 /* **************************************************************** */
 
-bool game_check_move(c_game g, uint i, uint j, square s)
+bool game_check_move(c_game g, uint i, uint j, square f)
 {
-    return INSIDE(g, i, j) && !game_is_discovered(g, i, j) && (s & F_MASK);
+    return INSIDE(g, i, j) && !_DISCO(g, i, j) && !(f & S_MASK) &&
+           !(f == DISCOVERED && _FLAG(g, i, j));
 }
 
 /* **************************************************************** */
 
-void game_play_move(game g, uint i, uint j, square s)
+void game_play_move(game g, uint i, uint j, square f)
 {
-    if (!game_check_move(g, i, j, s)) return;
-    SQUARE(g, i, j) = (SQUARE(g, i, j) | s);
+    if (!game_check_move(g, i, j, f)) return;
+    if (_FLAG(g, i, j)) f = 0x00;
+    SQUARE(g, i, j) = (STATE(g, i, j) | f);
+    game_update_flags(g);
 }
 
 /* **************************************************************** */

@@ -8,6 +8,7 @@
 
 #include "game.h"
 #include "game_aux.h"
+#include "game_tools.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -35,7 +36,7 @@ static bool game_step(game g)
         printf("> action: help\n");
         printf("- press 'd <i> <j>' to discover the square (i,j)\n");
         printf("- press 'f <i> <j>' to put a flag at square (i,j)\n");
-        // printf("- press 'w' <filename> to save\n");
+        printf("- press 's' <filename> to save\n");
         printf("- press 'r' to restart\n");
         printf("- press 'q' to quit\n");
     }
@@ -72,19 +73,19 @@ static bool game_step(game g)
         game_play_move(g, i, j, m);
         return true; // continue to play
     }
-    // else if (c == 'w')
-    // { // save
-    //     char file_name[10];
-    //     int ret = scanf("%s", file_name);
-    //     if (ret != 1)
-    //     {
-    //         printf("Error: invalid user input!\n");
-    //         return true;
-    //     }
-    //     printf("> action: save game\n");
-    //     game_save(g, file_name);
-    //     return true;
-    // }
+    else if (c == 's')
+    { // save
+        char filename[50];
+        int ret = scanf("%s", filename);
+        if (ret != 1)
+        {
+            printf("Error: invalid user input!\n");
+            return true;
+        }
+        printf("> action: save game\n");
+        game_save(g, filename);
+        return true;
+    }
     else
     {
         printf("Error: invalid user input!\n");
@@ -99,11 +100,10 @@ static bool game_step(game g)
 int main(int argc, char *argv[])
 {
     game g = NULL;
-    g = game_default();
-    // if (argc == 1)
-    //     g = game_default();
-    // else
-    //     g = game_load(argv[1]);
+    if (argc == 1)
+        g = game_default();
+    else
+        g = game_load(argv[1]);
 
     game_print(g);
     bool over = game_is_over(g);

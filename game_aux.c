@@ -7,6 +7,7 @@
 
 #include "game_aux.h"
 #include "game.h"
+#include "game_examples.h"
 #include "game_private.h"
 
 #include <assert.h>
@@ -21,8 +22,19 @@
 void game_print(c_game g)
 {
     assert(g);
-    PRINT_LINE(g, ("%d", j));
-    PRINT_LINE(g, ("-"));
+    printf("   ");
+    for (uint j = 0; j < (g->nb_cols); j++)
+    {
+        printf("%d", j);
+    }
+    printf("\n");
+
+    printf("   ");
+    for (uint j = 0; j < (g->nb_cols); j++)
+    {
+        printf("-");
+    }
+    printf("\n");
 
     for (uint i = 0; i < game_nb_rows(g); i++)
     {
@@ -33,23 +45,15 @@ void game_print(c_game g)
         }
         printf("|\n");
     }
-    PRINT_LINE(g, ("-"));
+
+    printf("   ");
+    for (uint j = 0; j < (g->nb_cols); j++)
+    {
+        printf("-");
+    }
+    printf("\n");
 }
 
 /* ************************************************************************** */
 
-game game_default()
-{
-    square squares[DEFAULT_SIZE * DEFAULT_SIZE] = {
-        BLANK, BLANK, BLANK, BLANK, MINE,  BLANK, BLANK, MINE,  BLANK, // line 0
-        MINE,  BLANK, BLANK, BLANK, BLANK, BLANK, MINE,  MINE,  BLANK, // line 1
-        BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, // line 2
-        BLANK, MINE,  BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, // line 3
-        BLANK, BLANK, MINE,  BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, // line 4
-        BLANK, BLANK, MINE,  BLANK, MINE,  BLANK, BLANK, BLANK, BLANK, // line 5
-        BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, // line 6
-        BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, BLANK, // line 7
-        BLANK, BLANK, BLANK, BLANK, BLANK, MINE,  BLANK, BLANK, BLANK  // line 8
-    };
-    return game_new(DEFAULT_SIZE, DEFAULT_SIZE, squares);
-}
+game game_default() { return game_new(DFLT_SIZE, DFLT_SIZE, dflt_squares); }

@@ -18,8 +18,8 @@
 typedef enum Square
 {
     /* STATES */
-    BLANK,       /**< an blank square */
-    MINE = 0x09, /**< a square with a mine on it */
+    BLANK = 0x01, /**< an blank square */
+    MINE = 0x0A,  /**< a square with a mine on it (BLANK + 9) */
 
     /* FLAGS */
     FLAGED = 0x10,
@@ -48,24 +48,24 @@ typedef unsigned int uint;
 
 /**
  * @brief Creates a new empty game with defaut size.
- * @param nb_cols the number of columns in the game grid.
  * @param nb_rows the number of rows in the game grid.
+ * @param nb_cols the number of columns in the game grid.
  * @details All squares are initialized with blank squares.
  * @return the created game
  **/
-game game_new_empty(uint nb_cols, uint nb_rows);
+game game_new_empty(uint nb_rows, uint nb_cols);
 
 /**
  * @brief Creates a new game with default size and initializes it.
- * @param nb_cols the number of columns in the game grid.
  * @param nb_rows the number of rows in the game grid.
+ * @param nb_cols the number of columns in the game grid.
  * @param squares an array describing the initial square values (<a
  * href="https://en.wikipedia.org/wiki/row-_and_column-major_order">row-major
  * storage</a>)
  * @pre @p squares must be an initialized array of size (nb_cols * nb_rows).
  * @return the created game
  **/
-game game_new(uint nb_cols, uint nb_rows, square *squares);
+game game_new(uint nb_rows, uint nb_cols, square *squares);
 
 /**
  * @brief Duplicates a game.

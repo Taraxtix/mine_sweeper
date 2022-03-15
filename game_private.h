@@ -46,7 +46,7 @@ typedef enum _dir
 /* *********************************************** */
 
 // clang-format off
-#define DEFAULT_SIZE 9
+#define DFLT_SIZE 9
 #define NB_PREV_DIR 4
 #define NB_DIR 8
 
@@ -56,10 +56,9 @@ typedef enum _dir
 #define FLAGS(g, i, j) (SQUARE(g, i, j) & F_MASK)
 #define _FLAG(g, i, j) (FLAGS(g, i, j) & FLAGED)
 #define _DISCO(g, i, j) (FLAGS(g, i, j) & DISCOVERED)
-#define INSIDE(g, i, j) ((int)i >= 0 || (int)j >= 0 || i < g->nb_cols || j < g->nb_cols)
+#define INSIDE(g, i, j) ((int)i >= 0 && (int)j >= 0 && i < g->nb_cols && j < g->nb_cols)
 #define FREE(g) do { free(g->squares); free(g); } while (0)
-#define PRINT_LINE(g, c) do { printf("   "); for (uint j = 0; j < (g->nb_cols); j++) { printf(c); } printf("\n"); } while (0)
-#define BLANK_0_MINED_NEIGH(g, i, j) (game_is_blank(g, i, j) && _DISCO(g, i, j) && !game_get_blank_nb(g, i, j))
+#define BLANK_0_MINED_NEIGH(g, i, j) (game_is_blank(g, i, j) && _DISCO(g, i, j) && game_get_blank_nb(g, i, j) == 0)
 // clang-format on
 
 /* *********************************************** */
@@ -68,11 +67,30 @@ typedef enum _dir
 
 /**
  * @brief convert a square into a character
- *
- * @param s a square
+ * @details Take a game with both row and column index for handling numbers on
+ * blank squares
+ * @param g the game
+ * @param i the row index of the square to convert
+ * @param j the column index of the square to convert
  * @return the corresponding character, '?' otherwise
  */
 char _square2char(c_game g, uint i, uint j);
+
+/**
+ * @brief Convert a square into his image for saving a game
+ *
+ * @param s the square to convert
+ * @return char
+ */
+char _square2img(square s);
+
+/**
+ * @brief Convert an image into the corresponding square
+ *
+ * @param c the image to convert
+ * @return square
+ */
+square _img2square(char c);
 
 /**
  * @brief Discover all the neighboors of the (i, j) squares in the game, then
