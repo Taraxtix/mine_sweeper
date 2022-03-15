@@ -1,0 +1,41 @@
+BasedOnStyle: LLVM
+
+IndentWidth: 4
+
+# Align arguments after opening brackets.
+#
+# Example :
+# function(arg1,
+#          arg2,
+#          ... )
+AlignAfterOpenBracket: Align
+
+#Align escaped new lines.
+#
+#Example :
+#char *string = "String     \
+#    which is on multiple   \
+#    lines for this example \"
+AlignEscapedNewlines: Left
+
+AllowShortBlocksOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: true
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+  IndentBraces: false
+  AfterStruct: true
+  AfterCaseLabel: true
+  AfterControlStatement: Always
+  AfterEnum: true
+  AfterFunction: true
+  BeforeElse: true
+  SplitEmptyFunction: false
+
+IndentPPDirectives: BeforeHash
+
+KeepEmptyLinesAtTheStartOfBlocks: false
+
+PointerAlignment: Right
